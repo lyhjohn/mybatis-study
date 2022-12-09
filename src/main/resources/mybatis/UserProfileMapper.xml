@@ -6,6 +6,9 @@
 <mapper namespace="com.yohan.mybatisstudy.mapper.UserProfileMapper">
 
   <resultMap type="com.yohan.mybatisstudy.model.UserProfile" id="usermap">
+<!--    컬럼과 프로퍼티 이름이 같더라도 다대일 관계에서 id 명시를 안해주면
+메인쿼리와 서브쿼리의 id 명이 같을 시 메인쿼리의 id가 null로 나온다.-->
+    <id column="id" property="id"/>
     <result column="name" property="username"/>
     <result column="phone" property="userPhone"/>
     <collection property="employees" column="id" ofType="Employee" select="selectEmployees"/>
