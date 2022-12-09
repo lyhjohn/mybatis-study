@@ -1,5 +1,6 @@
 package com.yohan.mybatisstudy.mapper;
 
+import com.yohan.mybatisstudy.model.Employee;
 import com.yohan.mybatisstudy.model.UserProfile;
 import java.util.List;
 import org.apache.ibatis.annotations.Delete;
@@ -48,6 +49,9 @@ public interface UserProfileMapper {
 	@Delete("delete from UserProfile where id=#{id}")
 	int deleteUserProfile(@Param("id") String id);
 
+	UserProfile selectUser(String id);
+
+	List<Employee> selectEmployees(String id);
 //	@Select("select * from UserProfile u left join employee e on u.id = e.user_id where u.id = #{id}")
 //	@ResultMap(value = "UserMap")
 //	UserProfile getUserProfileAndEmployees(@Param("id") Long id);

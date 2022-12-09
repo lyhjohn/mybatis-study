@@ -56,4 +56,9 @@ public class UserController {
 	public List<UserProfile> getUserProfileAndEmployees() {
 		return userService.getAll();
 	}
+
+	@GetMapping("/user/mapper/{id}")
+	public UserProfile getUser(@PathVariable String id) {
+		return userService.getUser(id);
+	}
 }

@@ -29,9 +29,15 @@ public class UserService {
 	}
 
 	// Transactional 에 의해 예외 발생 시 반영된 db 까지 모두 롤백됨
-	@Transactional
+	// rollbackFor: 롤백 원하는 예외를 명시하지 않으면 메서드 내에서 처리하도록 지정된 예외에 대해서만 롤백함
+	@Transactional(rollbackFor = Exception.class)
 	public UserProfile add(UserProfile userProfile) {
 		userProfileMapper.insertUserProfile(userProfile);
 		return userProfile;
+	}
+
+	@Transactional
+	public UserProfile getUser(String id) {
+		return userProfileMapper.selectUser(id);
 	}
 }
