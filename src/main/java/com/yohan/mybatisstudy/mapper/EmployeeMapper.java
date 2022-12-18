@@ -13,6 +13,7 @@ import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.transaction.annotation.Transactional;
 
 @Mapper
 public interface EmployeeMapper {
@@ -43,4 +44,6 @@ public interface EmployeeMapper {
 	@ResultMap(value = "EmployeeMap")
 	List<Employee> getByUserId(@Param("id") Long id);
 
+	@Transactional(rollbackFor = Exception.class)
+	int insertEmployeeMapper(Employee employee);
 }

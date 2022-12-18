@@ -38,7 +38,7 @@ public interface UserProfileMapper {
 	// 영향받은 컬럼 수를 반환
 	@Insert("insert into UserProfile(name, phone, address) values(#{UserProfile.username},"
 		+ "#{UserProfile.userPhone}, #{UserProfile.address})")
-	@Options(useGeneratedKeys = true, keyProperty = "id")
+	@Options(useGeneratedKeys = true, keyProperty = "id") // 키 자동생성
 	// model 객체의 id 속성에 key값이 저장되어 반환됨
 	int insertUserProfile(@Param("UserProfile") UserProfile userProfile);
 
@@ -51,7 +51,13 @@ public interface UserProfileMapper {
 
 	UserProfile selectUser(String id);
 
-	List<Employee> selectEmployees(String id);
+	List<UserProfile> getUserProfileListMapper();
+
+	int insertUserMapper(UserProfile userProfile);
+
+	List<UserProfile> selectUserAndEmployeeUser_ID(Long id);
+
+
 //	@Select("select * from UserProfile u left join employee e on u.id = e.user_id where u.id = #{id}")
 //	@ResultMap(value = "UserMap")
 //	UserProfile getUserProfileAndEmployees(@Param("id") Long id);

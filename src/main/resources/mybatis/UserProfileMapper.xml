@@ -5,20 +5,81 @@
 
 <mapper namespace="com.yohan.mybatisstudy.mapper.UserProfileMapper">
 
+  <!--  id를 파라미터로 받아 해당하는 UserProfile 조회-->
   <resultMap type="com.yohan.mybatisstudy.model.UserProfile" id="usermap">
-<!--    컬럼과 프로퍼티 이름이 같더라도 다대일 관계에서 id 명시를 안해주면
-메인쿼리와 서브쿼리의 id 명이 같을 시 메인쿼리의 id가 null로 나온다.-->
+    <!--    컬럼과 프로퍼티 이름이 같더라도 다대일 관계에서 id 명시를 안해주면
+    메인쿼리와 서브쿼리의 id 명이 같을 시 메인쿼리의 id가 null로 나온다.-->
     <id column="id" property="id"/>
     <result column="name" property="username"/>
     <result column="phone" property="userPhone"/>
-    <collection property="employees" column="id" ofType="Employee" select="selectEmployees"/>
+    <collection property="employees" column="id" select="selectEmployeesById"/>
   </resultMap>
 
   <select id="selectUser" resultMap="usermap">
-    select * from userprofile u where #{id} =u.id;
+    select *
+    from userprofile u
+    where #{id} = u.id;
+  </select>
+
+  <select id="selectEmployeesById" resultType="com.yohan.mybatisstudy.model.Employee">
+    select *
+    from Employee e
+    where #{id} = e.user_id;
+  </select>
+
+
+  <!--전체 UserProfile 조회  -->
+  <resultMap type="com.yohan.mybatisstudy.model.UserProfile" id="userList">
+    <id column="id" property="id"/>
+    <result column="name" property="username"/>
+    <result column="phone" property="userPhone"/>
+    <collection property="employees" column="id" select="selectEmployees"/>
+  </resultMap>
+
+  <select id="getUserProfileListMapper" resultType="com.yohan.mybatisstudy.model.UserProfile"
+    resultMap="userList">
+    select *
+    from userprofile u;
   </select>
 
   <select id="selectEmployees" resultType="com.yohan.mybatisstudy.model.Employee">
-    select * from Employee e where ${id} = e.user_id;
+    select *
+    from Employee e
   </select>
+
+  <insert id="insertUserMapper" useGeneratedKeys="true" keyProperty="id">
+    insert into userprofile (id, name, phone, address)
+    values (#{id}, #{username}, #{userPhone}, #{address})
+  </insert>
+
+  <select id="selectUserAndEmployeeUser_ID" resultMap="resultUserMap"
+    resultType="com.yohan.mybatisstudy.model.ResParam">
+    select u.*, e.employee_name
+    from userprofile u
+           left join employee e on #{id} = e.user_id
+    where u.id = #{id};
+  </select>
+
+  <resultMap id="resultUserMap" type="com.yohan.mybatisstudy.model.ResParam">
+    <id column="id" property="id"></id>
+    <result column="name" property="username"></result>
+    <result column="phone" property="userPhone"></result>
+    <collection property="employees" column="id" select="selectEmployee"></collection>
+  </resultMap>
+
+  <select id="selectEmployee" resultType="com.yohan.mybatisstudy.model.Employee"
+    resultMap="resultEmployeeMap">
+    select *
+    from employee
+    where user_id = #{id}
+  </select>
+
+  <resultMap id="resultEmployeeMap" type="com.yohan.mybatisstudy.model.Employee">
+    <id column="id" property="id"></id>
+    <result column="user_id" property="user_id"></result>
+    <result column="employee_name" property="name"></result>
+    <result column="employee_address" property="address"></result>
+  </resultMap>
+
+
 </mapper>
